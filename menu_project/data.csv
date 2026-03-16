@@ -1,10 +1,11 @@
-id,title,owner,status,development_progress,test_progress,production_progress,phase,description,x,y,width,height
-sifi,Scintillator fiber,Christoph Cesar,Production,100,100,15,Initiation,Initial project alignment and goals,80,0,260,130
-tof,Time-of-Flight,Martyna Czogalik,Test,100,80,20,Analysis,Collection of requirements and constraints,60,150,260,130
-diamand,Diamand detector,Chiara Nociforo,Test,50,80,20,Design,Architecture and component design,40,300,260,130
-music,MUSIC,David Urner,Development,30,30,15,Execution,Development and integration of features,60,450,280,130
-gem-tpc,GEM TPC,Francisco Garcia,Development,70,50,7,Validation,System and acceptance testing,80,600,260,130
-integration,Integration,Irakli Keshelashvili,,0,0,0,,,500,300,400,130
-daq,Data acquisition,Stephane Pietri,Development,10,30,30,Release,Deployment and rollout preparation,900,100,260,130
-dcs,Detector Control System,Stephane Pietri,Development,10,10,10,Closure,Lessons learned and documentation,950,300,280,130
-ana,Analysis and data visualization,Stephane Pietri,Development,50,50,50,,,900,500,350,130
+id,connect,title,subwpl,status,development_progress,test_progress,production_progress,phase,x,y,width,height,description
+sifi,integration,Scintillator fiber,Christoph Cesar,Production,100,100,15,Production,120,0,260,160,
+tof,integration,Time-of-Flight,Martyna Czogalik,Test,100,80,20,Production,80,180,260,160,
+diamand,integration,Diamand detector,Chiara Nociforo,Test,50,80,20,Production,60,360,260,160,
+music,integration,MUSIC,David Urner,Development,30,30,15,Design,80,540,280,160,
+gem-tpc,integration,GEM TPC,Francisco Garcia,Development,70,50,7,Procurement,120,720,260,160,
+integration,commissioning,System Integration,Irakli Keshelashvili,Development,2,3,4,Assembly,450,350,260,160,Integration of all detector and software systems
+commissioning,,Beam time commissioning,Irakli Keshelashvili,Development,7,8,9,Planing,450,800,260,160,
+daq,integration,Data acquisition,Stephane Pietri,Development,10,30,30,Release,800,100,300,160,
+dcs,integration,Detector Control System,Stephane Pietri,Development,10,10,10,Release,850,350,280,160,
+ana,integration,Analysis and data visualization,Stephane Pietri,Development,50,50,50,Release,800,600,350,160,

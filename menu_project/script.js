@@ -1,24 +1,27 @@
 const nodes = [...document.querySelectorAll(".node")];
-const statusFilter = document.getElementById("statusFilter");
 
-const detailsTitle = document.getElementById("detailsTitle");
-const detailsDescription = document.getElementById("detailsDescription");
-const metaOwner = document.getElementById("metaOwner");
-const metaStatus = document.getElementById("metaStatus");
-const metaPhase = document.getElementById("metaPhase");
-const metaProgress = document.getElementById("metaProgress");
+const detailsTitle          = document.getElementById("detailsTitle");
+const detailsDescription    = document.getElementById("detailsDescription");
+const metaSubWPL            = document.getElementById("metaSubWPL");
+const metaStatus            = document.getElementById("metaStatus");
+const metaPhase             = document.getElementById("metaPhase");
+const metaDevelopment       = document.getElementById("metaDevelopment");
+const metaTests             = document.getElementById("metaTests");
+const metaProduction        = document.getElementById("metaProduction");
 
 function clearActive() {
     nodes.forEach(node => node.classList.remove("active"));
 }
 
 function showNodeDetails(node) {
-    detailsTitle.textContent = node.dataset.title || "Details";
-    detailsDescription.textContent = node.dataset.description || "No description";
-    metaOwner.textContent = node.dataset.owner || "—";
-    metaStatus.textContent = node.dataset.status || "—";
-    metaPhase.textContent = node.dataset.phase || "—";
-    metaProgress.textContent = (node.dataset.progress || "0") + "%";
+    detailsTitle.textContent        = node.dataset.title        || "Details";
+    detailsDescription.textContent  = node.dataset.description  || "No description";
+    metaSubWPL.textContent          = node.dataset.subwpl       || "—";
+    metaStatus.textContent          = node.dataset.status       || "—";
+    metaPhase.textContent           = node.dataset.phase        || "—";
+    metaDevelopment.textContent     = (node.dataset.development || "0") + "%";
+    metaTests.textContent           = (node.dataset.tests       || "0") + "%";
+    metaProduction.textContent      = (node.dataset.production  || "0") + "%";
 }
 
 nodes.forEach(node => {
@@ -27,24 +30,6 @@ nodes.forEach(node => {
         node.classList.add("active");
         showNodeDetails(node);
     });
-});
-
-statusFilter.addEventListener("change", () => {
-    const value = statusFilter.value;
-
-    nodes.forEach(node => {
-        const nodeStatus = node.dataset.status || "";
-        const visible = value === "all" || nodeStatus === value;
-        node.style.display = visible ? "" : "none";
-    });
-
-    clearActive();
-    detailsTitle.textContent = "Details";
-    detailsDescription.textContent = "Select a project item.";
-    metaOwner.textContent = "—";
-    metaStatus.textContent = "—";
-    metaPhase.textContent = "—";
-    metaProgress.textContent = "—";
 });
 
 function downloadSVG() {
@@ -63,7 +48,7 @@ function downloadSVG() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "project-chart.svg";
+    a.download = "project-cards.svg";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -76,4 +61,26 @@ document.getElementById("downloadPdfBtn").addEventListener("click", () => window
 if (nodes.length > 0) {
     nodes[0].classList.add("active");
     showNodeDetails(nodes[0]);
+}
+
+const statusFilter = document.getElementById("statusFilter");
+
+if (statusFilter) {
+    statusFilter.addEventListener("change", () => {
+
+        const value = statusFilter.value.toLowerCase();
+
+        nodes.forEach(node => {
+
+            const status = (node.dataset.status || "").toLowerCase();
+
+            if (value === "all" || status.includes(value)) {
+                node.style.display = "";
+            } else {
+                node.style.display = "none";
+            }
+
+        });
+
+    });
 }

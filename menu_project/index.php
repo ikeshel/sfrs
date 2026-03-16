@@ -2,6 +2,10 @@
 $csvFile = __DIR__ . '/data.csv';
 $rows = [];
 
+function h($value): string {
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+}
+
 if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
     $headers = fgetcsv($handle);
 
@@ -12,9 +16,12 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
 
                 $row['x'] = isset($row['x']) ? (float)$row['x'] : 0;
                 $row['y'] = isset($row['y']) ? (float)$row['y'] : 0;
-                $row['width'] = isset($row['width']) ? (float)$row['width'] : 240;
-                $row['height'] = isset($row['height']) ? (float)$row['height'] : 120;
-                $row['development_progress'] = isset($row['development_progress']) ? (int)$row['development_progress'] : 0;
+                $row['width'] = isset($row['width']) ? (float)$row['width'] : 260;
+                $row['height'] = isset($row['height']) ? (float)$row['height'] : 140;
+
+                $row['development_progress'] = max(0, min(100, (int)($row['development_progress'] ?? 0)));
+                $row['test_progress'] = max(0, min(100, (int)($row['test_progress'] ?? 0)));
+                $row['production_progress'] = max(0, min(100, (int)($row['production_progress'] ?? 0)));
 
                 $rows[] = $row;
             }
@@ -23,51 +30,59 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
 
     fclose($handle);
 }
-
-function h($value): string {
-    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Chart from CSV</title>
+    <title>Project Overview</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="wrap">
     <div class="topbar">
         <div>
-            <h1>Interactive Super FRS Project Chart</h1>
-            <div class="subtitle">PHP + CSV + SVG + JavaScript</div>
+            <h1>Super FRS interactive project chart</h1>
+            <div class="subtitle">project description</div>
         </div>
 
         <div class="controls">
+
             <select id="statusFilter">
-                <option value="all">Show all</option>
+                <option value="all">All status</option>
                 <option value="Development">Development</option>
-                <option value="Test">Test</option>
+                <option value="Tests">Tests</option>
                 <option value="Production">Production</option>
-                <option value="Blocked">Blocked</option>
+                <option value="Completed">Completed</option>
             </select>
 
             <button id="downloadSvgBtn" type="button">Download SVG</button>
             <button id="downloadPdfBtn" type="button">Download PDF</button>
+
         </div>
     </div>
 
     <div class="layout">
         <div class="panel chart-panel">
             <div class="svg-wrap">
-                <svg id="projectSvg" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="chartTitle">
-                    <title id="chartTitle">Project chart loaded from CSV</title>
+                <svg id="projectSvg" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="chartTitle">
+                    <title id="chartTitle">Project cards with stacked progress bars</title>
 
                     <defs>
-                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#60a5fa"></stop>
+                        <linearGradient id="gradDev" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#93c5fd"></stop>
                             <stop offset="100%" stop-color="#2563eb"></stop>
+                        </linearGradient>
+
+                        <linearGradient id="gradTest" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#c4b5fd"></stop>
+                            <stop offset="100%" stop-color="#7c3aed"></stop>
+                        </linearGradient>
+
+                        <linearGradient id="gradProd" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#86efac"></stop>
+                            <stop offset="100%" stop-color="#059669"></stop>
                         </linearGradient>
                     </defs>
 
@@ -75,66 +90,77 @@ function h($value): string {
                         <?php
                             $id = $row['id'] ?? '';
                             $title = $row['title'] ?? '';
-                            $owner = $row['owner'] ?? '';
+                            $subwpl = $row['subwpl'] ?? '';
                             $status = $row['status'] ?? '';
                             $phase = $row['phase'] ?? '';
-                            $progressDevelopment = max(0, min(100, (int)$row['development_progress']));
                             $description = $row['description'] ?? '';
+
                             $x = $row['x'];
                             $y = $row['y'];
                             $width = $row['width'];
                             $height = $row['height'];
 
-                            $boxClass = 'neutral-box';
-                            if ($status === 'Production') {
-                                $boxClass = 'done-box';
-                            } elseif ($status === 'Blocked') {
-                                $boxClass = 'risk-box';
-                            } elseif ($status === 'Test') {
-                                $boxClass = 'phase-box';
-                            }
+                            $dev = $row['development_progress'];
+                            $test = $row['test_progress'];
+                            $prod = $row['production_progress'];
 
-                            $progressDevelopmentBarWidth = ($width - 40) * ($progressDevelopment / 100.0);
+                            $barX = 20;
+                            $barW = $width - 70;
+                            $barH = 10;
+
+                            $devY = 86;
+                            $testY = 104;
+                            $prodY = 122;
                         ?>
                         <g class="node"
                            data-id="<?= h($id) ?>"
                            data-title="<?= h($title) ?>"
-                           data-owner="<?= h($owner) ?>"
+                           data-subwpl="<?= h($subwpl) ?>"
                            data-status="<?= h($status) ?>"
                            data-phase="<?= h($phase) ?>"
-                           data-progress="<?= h($progressDevelopment) ?>"
-                           data-progress="<?= h($progressDevelopment) ?>"
                            data-description="<?= h($description) ?>"
+                           data-development="<?= h($dev) ?>"
+                           data-tests="<?= h($test) ?>"
+                           data-production="<?= h($prod) ?>"
                            transform="translate(<?= h($x) ?>, <?= h($y) ?>)">
-                            
-                            <rect class="<?= h($boxClass) ?>" width="<?= h($width) ?>" height="<?= h($height) ?>" rx="18" ry="18"></rect>
 
-                            <text x="20" y="32" class="node-title"><?= h($title) ?></text>
-                            <text x="20" y="56" class="node-small">Owner: <?= h($owner) ?></text>
-                            <text x="20" y="78" class="node-small">Status: <?= h($status) ?></text>
-                            <text x="20" y="100" class="node-small">Phase: <?= h($phase) ?></text>
+                            <rect class="card-box" width="<?= h($width) ?>" height="<?= h($height) ?>" rx="18" ry="18"></rect>
 
-                            <rect x="20" y="<?= h($height - 24) ?>" width="<?= h($width - 40) ?>" height="10" rx="5" ry="5" class="progress-bg"></rect>
-                            <rect x="20" y="<?= h($height - 24) ?>" width="<?= h($progressDevelopmentBarWidth) ?>" height="10" rx="5" ry="5" fill="url(#progressGradient)"></rect>
-                            <rect x="20" y="<?= h($height - 24) ?>" width="<?= h($progressDevelopmentBarWidth) ?>" height="10" rx="5" ry="15" fill="url(#progressGradient)"></rect>
-                            <text x="<?= h($width - 48) ?>" y="<?= h($height - 32) ?>" class="progress-label"><?= h($progressDevelopment) ?>%</text>
+                            <text x="16" y="24" class="node-title"><?= h($title) ?></text>
+                            <text x="16" y="46" class="node-small">Sub WPL: <?= h($subwpl) ?></text>
+                            <text x="16" y="66" class="node-small">Status: <?= h($status) ?></text>
+
+                            <text x="<?= h($width - 16) ?>" y="<?= h($devY + $barH / 2 + 4) ?>" text-anchor="end" class="percent-top"><?= h($dev) ?>%</text>
+                            <rect x="<?= h($barX) ?>" y="<?= h($devY) ?>" width="<?= h($barW) ?>" height="<?= h($barH) ?>" rx="5" ry="5" class="progress-bg"></rect>
+                            <rect x="<?= h($barX) ?>" y="<?= h($devY) ?>" width="<?= h($barW * $dev / 100) ?>" height="<?= h($barH) ?>" rx="5" ry="5" fill="url(#gradDev)"></rect>
+
+                            <text x="<?= h($width - 16) ?>" y="<?= h($testY + $barH / 2 + 4) ?>" text-anchor="end" class="percent-top"><?= h($test) ?>%</text>
+                            <rect x="<?= h($barX) ?>" y="<?= h($testY) ?>" width="<?= h($barW) ?>" height="<?= h($barH) ?>" rx="5" ry="5" class="progress-bg"></rect>
+                            <rect x="<?= h($barX) ?>" y="<?= h($testY) ?>" width="<?= h($barW * $test / 100) ?>" height="<?= h($barH) ?>" rx="5" ry="5" fill="url(#gradTest)"></rect>
+
+                            <text x="<?= h($width - 16) ?>" y="<?= h($prodY + $barH / 2 + 4) ?>" text-anchor="end" class="percent-top"><?= h($prod) ?>%</text>
+                            <rect x="<?= h($barX) ?>" y="<?= h($prodY) ?>" width="<?= h($barW) ?>" height="<?= h($barH) ?>" rx="5" ry="5" class="progress-bg"></rect>
+                            <rect x="<?= h($barX) ?>" y="<?= h($prodY) ?>" width="<?= h($barW * $prod / 100) ?>" height="<?= h($barH) ?>" rx="5" ry="5" fill="url(#gradProd)"></rect>
                         </g>
                     <?php endforeach; ?>
                 </svg>
             </div>
+
             <div class="footer-note">
-                Click a box to show details. The data comes from <code>data.csv</code>.
+                <div class="copyright">
+                    <p>&copy; 2026 Irakli Keshelashvili. All rights reserved.</p>
+                </div>
             </div>
         </div>
 
         <div class="panel side-panel">
             <h2 id="detailsTitle">Details</h2>
-            <p id="detailsDescription" class="hint">Select a project item.</p>
+            <p id="detailsDescription" class="hint">Click a project card.</p>
 
             <div class="meta">
                 <div class="meta-card">
-                    <div class="meta-label">Owner</div>
-                    <div class="meta-value" id="metaOwner">—</div>
+                    <div class="meta-label">Sub WPL</div>
+                    <div class="meta-value" id="metaSubWPL">—</div>
                 </div>
 
                 <div class="meta-card">
@@ -148,8 +174,18 @@ function h($value): string {
                 </div>
 
                 <div class="meta-card">
-                    <div class="meta-label">Progress</div>
-                    <div class="meta-value" id="metaProgress">—</div>
+                    <div class="meta-label">Development</div>
+                    <div class="meta-value" id="metaDevelopment">—</div>
+                </div>
+
+                <div class="meta-card">
+                    <div class="meta-label">Tests</div>
+                    <div class="meta-value" id="metaTests">—</div>
+                </div>
+
+                <div class="meta-card">
+                    <div class="meta-label">Production</div>
+                    <div class="meta-value" id="metaProduction">—</div>
                 </div>
             </div>
         </div>
