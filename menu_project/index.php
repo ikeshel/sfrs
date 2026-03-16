@@ -14,6 +14,7 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
             if (count($data) === count($headers)) {
                 $row = array_combine($headers, $data);
 
+                $row['connect'] = trim($row['connect'] ?? '');
                 $row['x'] = isset($row['x']) ? (float)$row['x'] : 0;
                 $row['y'] = isset($row['y']) ? (float)$row['y'] : 0;
                 $row['width'] = isset($row['width']) ? (float)$row['width'] : 260;
@@ -29,6 +30,15 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
     }
 
     fclose($handle);
+
+    $nodesById = [];
+
+    foreach ($rows as $row) {
+        $nodeId = $row['id'] ?? '';
+        if ($nodeId !== '') {
+            $nodesById[$nodeId] = $row;
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -68,7 +78,55 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
             <div class="svg-wrap">
                 <svg id="projectSvg" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="chartTitle">
                     <title id="chartTitle">Project cards with stacked progress bars</title>
+<?php
+$nodesById = [];
+foreach ($rows as $r) {
+    $nodeId = $r['id'] ?? '';
+    if ($nodeId !== '') {
+        $nodesById[$nodeId] = $r;
+    }
+}
+?>
 
+<?php foreach ($rows as $source): ?>
+    <?php
+    $sourceId = $source['id'] ?? '';
+    $connectRaw = trim($source['connect'] ?? '');
+
+    if ($sourceId === '' || $connectRaw === '') {
+        continue;
+    }
+
+    $targets = array_filter(array_map('trim', explode(',', $connectRaw)));
+    ?>
+
+    <?php foreach ($targets as $targetId): ?>
+        <?php
+        if (!isset($nodesById[$targetId])) {
+            continue;
+        }
+
+        $target = $nodesById[$targetId];
+
+        $startX = $source['x'] + $source['width'];
+        $startY = $source['y'] + $source['height'] / 2;
+
+        $endX = $target['x'];
+        $endY = $target['y'] + $target['height'] / 2;
+
+        $dx = max(60, abs($endX - $startX) * 0.35);
+
+        $pathD = sprintf(
+            'M %.1f %.1f C %.1f %.1f, %.1f %.1f, %.1f %.1f',
+            $startX, $startY,
+            $startX + $dx, $startY,
+            $endX - $dx, $endY,
+            $endX, $endY
+        );
+        ?>
+        <path class="connector" d="<?= h($pathD) ?>" marker-end="url(#arrowhead)"></path>
+    <?php endforeach; ?>
+<?php endforeach; ?>
                     <defs>
                         <linearGradient id="gradDev" x1="0%" y1="0%" x2="100%" y2="0%">
                             <stop offset="0%" stop-color="#93c5fd"></stop>
