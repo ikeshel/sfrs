@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Project Chart Example</title>
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --panel: #ffffff;
+      --line: #d8dee9;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --phase: #eef2ff;
+      --risk: #fff7ed;
+      --done: #ecfdf5;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.7rem;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button, select {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    button:hover, select:hover {
+      border-color: var(--accent);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) 320px;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .chart-panel {
+      padding: 10px;
+    }
+
+    .side-panel {
+      padding: 20px;
+    }
+
+    .side-panel h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meta-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fbfdff;
+    }
+
+    .meta-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-value {
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .svg-wrap {
+      width: 100%;
+      overflow: auto;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fcfdff 0%, #f7faff 100%);
+    }
+
+    svg {
+      width: 100%;
+      min-height: 760px;
+      display: block;
+    }
+
+    .node rect {
+      stroke: #cbd5e1;
+      stroke-width: 1.2;
+      rx: 18;
+      ry: 18;
+      transition: transform 120ms ease, stroke 120ms ease, filter 120ms ease;
+      cursor: pointer;
+    }
+
+    .node:hover rect {
+      stroke: var(--accent);
+      filter: drop-shadow(0 10px 18px rgba(37, 99, 235, 0.18));
+    }
+
+    .node.active rect {
+      stroke: var(--accent);
+      stroke-width: 2;
+      filter: drop-shadow(0 12px 22px rgba(37, 99, 235, 0.22));
+    }
+
+    .node text {
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      fill: #111827;
+    }
+
+    .small {
+      font-size: 13px;
+      fill: #6b7280;
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .link {
+      stroke: #94a3b8;
+      stroke-width: 2.2;
+      fill: none;
+      marker-end: url(#arrow);
+      opacity: 0.9;
+    }
+
+    .link.highlight {
+      stroke: var(--accent);
+      stroke-width: 3;
+    }
+
+    .muted-box { fill: #ffffff; }
+    .phase-box { fill: var(--phase); }
+    .risk-box { fill: var(--risk); }
+    .done-box { fill: var(--done); }
+
+    .footer-note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      .controls {
+        display: none;
+      }
+      .panel {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>Interactive Project Description Chart</h1>
+        <div class="subtitle">SVG-first example with interaction and SVG/PDF export</div>
+      </div>
+
+      <div class="controls">
+        <select id="filterSelect">
+          <option value="all">Show all</option>
+          <option value="core">Core flow only</option>
+          <option value="risk">Show risk-related</option>
+          <option value="done">Show completed-related</option>
+        </select>
+        <button id="downloadSvgBtn">Download SVG</button>
+        <button id="downloadPdfBtn">Download PDF</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel chart-panel">
+        <div class="svg-wrap">
+          <svg id="projectSvg" viewBox="0 0 1300 760" xmlns="http://www.w3.org/2000/svg" aria-labelledby="chartTitle" role="img">
+            <title id="chartTitle">Project description workflow chart</title>
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"></path>
+              </marker>
+            </defs>
+
+            <path class="link" data-from="kickoff" data-to="requirements" d="M 250 125 C 320 125, 330 125, 390 125" />
+            <path class="link" data-from="requirements" data-to="design" d="M 610 125 C 680 125, 690 125, 750 125" />
+            <path class="link" data-from="design" data-to="implementation" d="M 970 125 C 1040 125, 1050 125, 1110 125" />
+            <path class="link" data-from="requirements" data-to="risks" d="M 500 180 C 500 250, 500 250, 500 320" />
+            <path class="link" data-from="design" data-to="review" d="M 860 180 C 860 250, 860 250, 860 320" />
+            <path class="link" data-from="risks" data-to="review" d="M 610 375 C 700 375, 710 375, 750 375" />
+            <path class="link" data-from="review" data-to="release" d="M 970 375 C 1050 375, 1080 500, 1130 570" />
+            <path class="link" data-from="implementation" data-to="release" d="M 1200 180 C 1220 260, 1220 450, 1200 540" />
+            <path class="link" data-from="release" data-to="archive" d="M 1110 610 C 920 650, 470 650, 250 610" />
+
+            <g class="node" data-id="kickoff" data-group="core" transform="translate(30,70)">
+              <rect class="muted-box" width="220" height="110"></rect>
+              <text x="20" y="35" class="title">Kickoff</text>
+              <text x="20" y="62" class="small">Define goals, stakeholders, scope</text>
+              <text x="20" y="86" class="tag" fill="#2563eb">START</text>
+            </g>
+
+            <g class="node" data-id="requirements" data-group="core" transform="translate(390,70)">
+              <rect class="phase-box" width="220" height="110"></rect>
+              <text x="20" y="35" class="title">Requirements</text>
+              <text x="20" y="62" class="small">Collect use cases and constraints</text>
+              <text x="20" y="86" class="tag" fill="#4f46e5">PHASE 1</text>
+            </g>
+
+            <g class="node" data-id="design" data-group="core" transform="translate(750,70)">
+              <rect class="phase-box" width="220" height="110"></rect>
+              <text x="20" y="35" class="title">Design</text>
+              <text x="20" y="62" class="small">Architecture, UX, responsibilities</text>
+              <text x="20" y="86" class="tag" fill="#4f46e5">PHASE 2</text>
+            </g>
+
+            <g class="node" data-id="implementation" data-group="core done" transform="translate(1110,70)">
+              <rect class="done-box" width="160" height="110"></rect>
+              <text x="20" y="35" class="title">Build</text>
+              <text x="20" y="62" class="small">Develop features</text>
+              <text x="20" y="86" class="tag" fill="#059669">DONE</text>
+            </g>
+
+            <g class="node" data-id="risks" data-group="risk" transform="translate(390,320)">
+              <rect class="risk-box" width="220" height="110"></rect>
+              <text x="20" y="35" class="title">Risk Register</text>
+              <text x="20" y="62" class="small">Budget, timeline, technical risks</text>
+              <text x="20" y="86" class="tag" fill="#ea580c">RISK</text>
+            </g>
+
+            <g class="node" data-id="review" data-group="core" transform="translate(750,320)">
+              <rect class="muted-box" width="220" height="110"></rect>
+              <text x="20" y="35" class="title">Review Gate</text>
+              <text x="20" y="62" class="small">Approve readiness and changes</text>
+              <text x="20" y="86" class="tag" fill="#2563eb">CHECKPOINT</text>
+            </g>
+
+            <g class="node" data-id="release" data-group="core done" transform="translate(1040,540)">
+              <rect class="done-box" width="220" height="110"></rect>
+              <text x="20" y="35" class="title">Release</text>
+              <text x="20" y="62" class="small">Deploy, document, communicate</text>
+              <text x="20" y="86" class="tag" fill="#059669">MILESTONE</text>
+            </g>
+
+            <g class="node" data-id="archive" data-group="done" transform="translate(30,540)">
+              <rect class="muted-box" width="220" height="110"></rect>
+              <text x="20" y="35" class="title">Archive & Learn</text>
+              <text x="20" y="62" class="small">Retrospective and knowledge base</text>
+              <text x="20" y="86" class="tag" fill="#64748b">CLOSE</text>
+            </g>
+          </svg>
+        </div>
+        <div class="footer-note">Tip: click a node to highlight dependencies and show project details.</div>
+      </div>
+
+      <div class="panel side-panel">
+        <h2 id="detailsTitle">Chart details</h2>
+        <p class="hint" id="detailsText">Select a node in the chart to show description, owner, deliverables, and related links.</p>
+
+        <div class="meta">
+          <div class="meta-card">
+            <div class="meta-label">Owner</div>
+            <div class="meta-value" id="metaOwner">—</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label">Deliverables</div>
+            <div class="meta-value" id="metaDeliverables">—</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label">Status</div>
+            <div class="meta-value" id="metaStatus">—</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label">Related to</div>
+            <div class="meta-value" id="metaRelations">—</div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#eef2ff"></span>Phase</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#fff7ed"></span>Risk</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#ecfdf5"></span>Completed</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#ffffff"></span>Neutral</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const nodeData = {
+      kickoff: {
+        title: 'Kickoff',
+        description: 'Initial alignment around purpose, goals, team, and scope boundaries.',
+        owner: 'Project Lead',
+        deliverables: 'Project brief, stakeholder list, timeline draft',
+        status: 'Active',
+        related: 'Requirements'
+      },
+      requirements: {
+        title: 'Requirements',
+        description: 'Functional and non-functional requirements are gathered and prioritized.',
+        owner: 'Business Analyst',
+        deliverables: 'Requirement specification, use-case list',
+        status: 'In progress',
+        related: 'Kickoff, Design, Risk Register'
+      },
+      design: {
+        title: 'Design',
+        description: 'The solution is translated into architecture, interface concepts, and responsibilities.',
+        owner: 'System Architect',
+        deliverables: 'Architecture diagram, UX draft, component map',
+        status: 'Planned',
+        related: 'Requirements, Build, Review Gate'
+      },
+      implementation: {
+        title: 'Build',
+        description: 'The team develops, integrates, and validates the main features.',
+        owner: 'Engineering Team',
+        deliverables: 'Code, tests, build artifacts',
+        status: 'Completed',
+        related: 'Design, Release'
+      },
+      risks: {
+        title: 'Risk Register',
+        description: 'This node captures uncertainties and mitigation strategies.',
+        owner: 'Project Manager',
+        deliverables: 'Risk log, mitigation plan, contingency notes',
+        status: 'Monitored',
+        related: 'Requirements, Review Gate'
+      },
+      review: {
+        title: 'Review Gate',
+        description: 'Decision checkpoint before release or next investment.',
+        owner: 'Steering Committee',
+        deliverables: 'Approval notes, action items, go/no-go decision',
+        status: 'Pending',
+        related: 'Design, Risk Register, Release'
+      },
+      release: {
+        title: 'Release',
+        description: 'The result is delivered together with documentation and communication.',
+        owner: 'Release Manager',
+        deliverables: 'Deployment, release notes, user communication',
+        status: 'Completed',
+        related: 'Build, Review Gate, Archive & Learn'
+      },
+      archive: {
+        title: 'Archive & Learn',
+        description: 'Knowledge is preserved and the team performs a retrospective.',
+        owner: 'Project Office',
+        deliverables: 'Lessons learned, final archive, metrics summary',
+        status: 'Scheduled',
+        related: 'Release'
+      }
+    };
+
+    const nodes = [...document.querySelectorAll('.node')];
+    const links = [...document.querySelectorAll('.link')];
+    const filterSelect = document.getElementById('filterSelect');
+
+    const detailsTitle = document.getElementById('detailsTitle');
+    const detailsText = document.getElementById('detailsText');
+    const metaOwner = document.getElementById('metaOwner');
+    const metaDeliverables = document.getElementById('metaDeliverables');
+    const metaStatus = document.getElementById('metaStatus');
+    const metaRelations = document.getElementById('metaRelations');
+
+    function resetHighlight() {
+      nodes.forEach(n => n.classList.remove('active'));
+      links.forEach(l => l.classList.remove('highlight'));
+    }
+
+    function showDetails(id) {
+      const item = nodeData[id];
+      if (!item) return;
+
+      detailsTitle.textContent = item.title;
+      detailsText.textContent = item.description;
+      metaOwner.textContent = item.owner;
+      metaDeliverables.textContent = item.deliverables;
+      metaStatus.textContent = item.status;
+      metaRelations.textContent = item.related;
+    }
+
+    function highlightNode(id) {
+      resetHighlight();
+      const node = document.querySelector(`.node[data-id="${id}"]`);
+      if (node) node.classList.add('active');
+
+      links.forEach(link => {
+        const from = link.dataset.from;
+        const to = link.dataset.to;
+        if (from === id || to === id) {
+          link.classList.add('highlight');
+        }
+      });
+
+      showDetails(id);
+    }
+
+    nodes.forEach(node => {
+      node.addEventListener('click', () => {
+        highlightNode(node.dataset.id);
+      });
+    });
+
+    filterSelect.addEventListener('change', () => {
+      const value = filterSelect.value;
+
+      nodes.forEach(node => {
+        const group = node.dataset.group || '';
+        let show = false;
+
+        if (value === 'all') show = true;
+        else if (value === 'core') show = group.includes('core');
+        else if (value === 'risk') show = group.includes('risk');
+        else if (value === 'done') show = group.includes('done');
+
+        node.style.display = show ? '' : 'none';
+      });
+
+      links.forEach(link => {
+        const fromNode = document.querySelector(`.node[data-id="${link.dataset.from}"]`);
+        const toNode = document.querySelector(`.node[data-id="${link.dataset.to}"]`);
+        const visible = fromNode.style.display !== 'none' && toNode.style.display !== 'none';
+        link.style.display = visible ? '' : 'none';
+      });
+
+      resetHighlight();
+      detailsTitle.textContent = 'Chart details';
+      detailsText.textContent = 'Select a node in the chart to show description, owner, deliverables, and related links.';
+      metaOwner.textContent = '—';
+      metaDeliverables.textContent = '—';
+      metaStatus.textContent = '—';
+      metaRelations.textContent = '—';
+    });
+
+    function downloadSVG() {
+      const svg = document.getElementById('projectSvg');
+      const clone = svg.cloneNode(true);
+      clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+      const source = '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(clone);
+      const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'interactive-project-chart.svg';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('downloadSvgBtn').addEventListener('click', downloadSVG);
+    document.getElementById('downloadPdfBtn').addEventListener('click', () => window.print());
+
+    highlightNode('requirements');
+  </script>
+</body>
+</html>
