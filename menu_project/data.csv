@@ -1,10 +1,10 @@
-id,title,owner,status,development_progress,,,phase,description,x,y,width,height
-sifi,Scintillator fiber,Christoph Cesar,Production,100,,,Initiation,Initial project alignment and goals,80,0,260,130
-tof,Time-of-Flight,Martyna Czogalik,Test,50,,,Analysis,Collection of requirements and constraints,60,150,260,130
-diamand,Diamand detector,Chiara Nociforo,Test,50,,,Design,Architecture and component design,40,300,260,130
-music,MUSIC,David Urner,Development,30,,,Execution,Development and integration of features,60,450,280,130
-gem-tpc,GEM TPC,QA Team,Development,10,,,Validation,System and acceptance testing,80,600,260,130
-integration,Integration,,,,,,,,500,300,400,130
-daq,Data acquisition,Stephane Pietri,Development,5,,,Release,Deployment and rollout preparation,900,100,260,130
-dcs,Detector Control System,Stephane Pietri,Development,0,,,Closure,Lessons learned and documentation,950,300,280,130
-ana,Analysis and data visualization,Stephane Pietri,,,,,,,900,500,350,130
+id,title,owner,status,development_progress,test_progress,production_progress,phase,description,x,y,width,height
+sifi,Scintillator fiber,Christoph Cesar,Production,100,100,15,Initiation,Initial project alignment and goals,80,0,260,130
+tof,Time-of-Flight,Martyna Czogalik,Test,100,80,20,Analysis,Collection of requirements and constraints,60,150,260,130
+diamand,Diamand detector,Chiara Nociforo,Test,50,80,20,Design,Architecture and component design,40,300,260,130
+music,MUSIC,David Urner,Development,30,30,15,Execution,Development and integration of features,60,450,280,130
+gem-tpc,GEM TPC,Francisco Garcia,Development,70,50,7,Validation,System and acceptance testing,80,600,260,130
+integration,Integration,Irakli Keshelashvili,,0,0,0,,,500,300,400,130
+daq,Data acquisition,Stephane Pietri,Development,10,30,30,Release,Deployment and rollout preparation,900,100,260,130
+dcs,Detector Control System,Stephane Pietri,Development,10,10,10,Closure,Lessons learned and documentation,950,300,280,130
+ana,Analysis and data visualization,Stephane Pietri,Development,50,50,50,,,900,500,350,130
