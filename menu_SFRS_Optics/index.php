@@ -8,8 +8,8 @@
 <body>
     <div class="container">
         <div class="svg-wrapper">
-            <object type="image/svg+xml" data="RACI.svg">
-                <img src="RACI.svg" alt="RACI Diagram" />
+            <object type="image/svg+xml" data="S-FRS_Detectors_V.1.43.svg">
+                <img src="S-FRS_Detectors_V.1.43.svg" alt="S-FRS_Detectors_V.1.43" />
             </object>
         </div>
     </div>
