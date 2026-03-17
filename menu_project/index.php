@@ -1,4 +1,5 @@
 <?php
+
 $csvFile = __DIR__ . '/data.csv';
 $rows = [];
 
@@ -15,14 +16,14 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
                 $row = array_combine($headers, $data);
 
                 $row['connect'] = trim($row['connect'] ?? '');
-                $row['x'] = isset($row['x']) ? (float)$row['x'] : 0;
-                $row['y'] = isset($row['y']) ? (float)$row['y'] : 0;
-                $row['width'] = isset($row['width']) ? (float)$row['width'] : 260;
-                $row['height'] = isset($row['height']) ? (float)$row['height'] : 140;
+                $row['x']       = isset($row['x']) ? (float)$row['x'] : 0;
+                $row['y']       = isset($row['y']) ? (float)$row['y'] : 0;
+                $row['width']   = isset($row['width']) ? (float)$row['width'] : 260;
+                $row['height']  = isset($row['height']) ? (float)$row['height'] : 140;
 
                 $row['development_progress'] = max(0, min(100, (int)($row['development_progress'] ?? 0)));
-                $row['test_progress'] = max(0, min(100, (int)($row['test_progress'] ?? 0)));
-                $row['production_progress'] = max(0, min(100, (int)($row['production_progress'] ?? 0)));
+                $row['test_progress']        = max(0, min(100, (int)($row['test_progress'] ?? 0)));
+                $row['production_progress']  = max(0, min(100, (int)($row['production_progress'] ?? 0)));
 
                 $rows[] = $row;
             }
@@ -41,6 +42,9 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
     }
 }
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,56 +81,82 @@ if (file_exists($csvFile) && ($handle = fopen($csvFile, 'r')) !== false) {
         <div class="panel chart-panel">
             <div class="svg-wrap">
                 <svg id="projectSvg" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="chartTitle">
+                    " preserveAspectRatio="xMidYMid meet
                     <title id="chartTitle">Project cards with stacked progress bars</title>
+
 <?php
-$nodesById = [];
-foreach ($rows as $r) {
-    $nodeId = $r['id'] ?? '';
-    if ($nodeId !== '') {
-        $nodesById[$nodeId] = $r;
-    }
-}
-?>
-
-<?php foreach ($rows as $source): ?>
-    <?php
-    $sourceId = $source['id'] ?? '';
-    $connectRaw = trim($source['connect'] ?? '');
-
-    if ($sourceId === '' || $connectRaw === '') {
-        continue;
+    $nodesById = [];
+    foreach ($rows as $r) {
+        $nodeId = $r['id'] ?? '';
+        if ($nodeId !== '') {
+            $nodesById[$nodeId] = $r;
+        }
     }
 
-    $targets = array_filter(array_map('trim', explode(',', $connectRaw)));
-    ?>
+    foreach ($rows as $source): 
+        
+        $sourceId   = $source['id'] ?? '';
+        $connectRaw = trim($source['connect'] ?? '');
+        $source['status'] = $status;
 
-    <?php foreach ($targets as $targetId): ?>
-        <?php
-        if (!isset($nodesById[$targetId])) {
+        if ($sourceId === '' || $connectRaw === '') {
             continue;
         }
 
-        $target = $nodesById[$targetId];
+        $targets = array_filter(array_map('trim', explode(',', $connectRaw)));
 
-        $startX = $source['x'] + $source['width'];
-        $startY = $source['y'] + $source['height'] / 2;
+        foreach ($targets as $targetId):
+            if (!isset($nodesById[$targetId])) {
+                continue;
+            }
 
-        $endX = $target['x'];
-        $endY = $target['y'] + $target['height'] / 2;
+            $target = $nodesById[$targetId];
 
-        $dx = max(60, abs($endX - $startX) * 0.35);
+            // Calculate start and end points for the connector
+            // for left to right connection
+            if ($source['x'] < $target['x']) {
+                $source['status'] = ' left-to-right';
+                $startX = $source['x'] + $source['width']+5;
+                $startY = $source['y'] + $source['height'] / 2;
 
-        $pathD = sprintf(
-            'M %.1f %.1f C %.1f %.1f, %.1f %.1f, %.1f %.1f',
-            $startX, $startY,
-            $startX + $dx, $startY,
-            $endX - $dx, $endY,
-            $endX, $endY
-        );
-        ?>
-        <path class="connector" d="<?= h($pathD) ?>" marker-end="url(#arrowhead)"></path>
-    <?php endforeach; ?>
-<?php endforeach; ?>
+                $endX = $target['x']-5;
+                $endY = $target['y'] + $target['height'] / 2;
+            } 
+            else if ($source['x'] > $target['x'])
+            { // for right to left connection, swap start and end points           
+                $source['status'] = ' right-to-left';
+                $startX = $target['x'] + $target['width']+5;
+                $startY = $target['y'] + $target['height'] / 2;
+
+                $endX = $source['x']-5;
+                $endY = $source['y'] + $source['height'] / 2;
+            }
+            else
+            { // for vertical connection, connect from bottom to top
+                $source['status'] = ' vertical';
+                $startX = $source['x'] + $source['width'] / 2;
+                $startY = $source['y'] + $source['height'] + 5;
+
+                $endX = $target['x'] + $target['width'] / 2;
+                $endY = $target['y'] - 5;
+            }
+
+            
+            $dx = max(60, abs($endX - $startX) * 0.35);
+            $pathD = sprintf(
+                'M %.1f %.1f C %.1f %.1f, %.1f %.1f, %.1f %.1f',
+                $startX, $startY,
+                $startX + $dx, $startY,
+                $endX - $dx, $endY,
+                $endX, $endY
+            );
+
+        echo '<path class="connector' . h($source['status']) . '" d="' . h($pathD) . '" marker-end="url(#arrowhead)"></path>';
+        endforeach;
+    endforeach; 
+
+?>
+
                     <defs>
                         <linearGradient id="gradDev" x1="0%" y1="0%" x2="100%" y2="0%">
                             <stop offset="0%" stop-color="#93c5fd"></stop>
@@ -144,8 +174,7 @@ foreach ($rows as $r) {
                         </linearGradient>
                     </defs>
 
-                    <?php foreach ($rows as $row): ?>
-                        <?php
+                    <?php foreach ($rows as $row): 
                             $id = $row['id'] ?? '';
                             $title = $row['title'] ?? '';
                             $subwpl = $row['subwpl'] ?? '';

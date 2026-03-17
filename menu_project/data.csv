@@ -4,8 +4,8 @@ tof,integration,Time-of-Flight,Martyna Czogalik,Test,100,80,20,Production,80,180
 diamand,integration,Diamand detector,Chiara Nociforo,Test,50,80,20,Production,60,360,260,160,
 music,integration,MUSIC,David Urner,Development,30,30,15,Design,80,540,280,160,
 gem-tpc,integration,GEM TPC,Francisco Garcia,Development,70,50,7,Procurement,120,720,260,160,
-integration,commissioning,System Integration,Irakli Keshelashvili,Development,2,3,4,Assembly,800,350,260,160,Integration of all detector and software systems
-commissioning,,Beam time commissioning,Irakli Keshelashvili,Development,7,8,9,Planing,800,800,260,160,
-daq,integration,Data acquisition,Stephane Pietri,Development,10,30,30,Release,400,100,300,160,
-dcs,integration,Detector Control System,Stephane Pietri,Development,10,10,10,Release,450,350,280,160,
-ana,integration,Analysis and data visualization,Stephane Pietri,Development,50,50,50,Release,400,600,350,160,
+integration,commissioning,System Integration,Irakli Keshelashvili,Development,2,3,4,Assembly,450,350,260,160,Integration of all detector and software systems
+commissioning,,Beam time commissioning,Irakli Keshelashvili,Development,7,8,9,Planing,450,800,260,160,
+daq,integration,Data acquisition,Stephane Pietri,Development,10,30,30,Release,800,100,300,160,
+dcs,integration,Detector Control System,Stephane Pietri,Development,10,10,10,Release,850,350,280,160,
+ana,integration,Analysis and data visualization,Stephane Pietri,Development,50,50,50,Release,800,600,350,160,

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="projectSvg" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="chartTitle">
+                    <title id="chartTitle">Project cards with stacked progress bars</title>
+
+<path class="connector left-to-right" d="M 385.0 80.0 C 445.0 80.0, 385.0 430.0, 445.0 430.0" marker-end="url(#arrowhead)"/><path class="connector left-to-right" d="M 345.0 260.0 C 405.0 260.0, 385.0 430.0, 445.0 430.0" marker-end="url(#arrowhead)"/><path class="connector left-to-right" d="M 325.0 440.0 C 385.0 440.0, 385.0 430.0, 445.0 430.0" marker-end="url(#arrowhead)"/><path class="connector left-to-right" d="M 365.0 620.0 C 425.0 620.0, 385.0 430.0, 445.0 430.0" marker-end="url(#arrowhead)"/><path class="connector left-to-right" d="M 385.0 800.0 C 445.0 800.0, 385.0 430.0, 445.0 430.0" marker-end="url(#arrowhead)"/><path class="connector vertical" d="M 580.0 515.0 C 640.0 515.0, 520.0 795.0, 580.0 795.0" marker-end="url(#arrowhead)"/><path class="connector right-to-left" d="M 715.0 430.0 C 775.0 430.0, 735.0 180.0, 795.0 180.0" marker-end="url(#arrowhead)"/><path class="connector right-to-left" d="M 715.0 430.0 C 775.0 430.0, 785.0 430.0, 845.0 430.0" marker-end="url(#arrowhead)"/><path class="connector right-to-left" d="M 715.0 430.0 C 775.0 430.0, 735.0 680.0, 795.0 680.0" marker-end="url(#arrowhead)"/>
+                    <defs>
+                        <linearGradient id="gradDev" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#93c5fd"/>
+                            <stop offset="100%" stop-color="#2563eb"/>
+                        </linearGradient>
+
+                        <linearGradient id="gradTest" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#c4b5fd"/>
+                            <stop offset="100%" stop-color="#7c3aed"/>
+                        </linearGradient>
+
+                        <linearGradient id="gradProd" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#86efac"/>
+                            <stop offset="100%" stop-color="#059669"/>
+                        </linearGradient>
+                    </defs>
+
+                                                                    <g class="node active" data-id="sifi" data-title="Scintillator fiber" data-subwpl="Christoph Cesar" data-status="Production" data-phase="Production" data-description="" data-development="100" data-tests="100" data-production="15" transform="translate(120, 0)">
+
+                            <rect class="card-box" width="260" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">Scintillator fiber</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Christoph Cesar</text>
+                            <text x="16" y="66" class="node-small">Status: Production</text>
+
+                            <text x="244" y="95" text-anchor="end" class="percent-top">100%</text>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="244" y="113" text-anchor="end" class="percent-top">100%</text>
+                            <rect x="20" y="104" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="190" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="244" y="131" text-anchor="end" class="percent-top">15%</text>
+                            <rect x="20" y="122" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="28.5" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="tof" data-title="Time-of-Flight" data-subwpl="Martyna Czogalik" data-status="Test" data-phase="Production" data-description="" data-development="100" data-tests="80" data-production="20" transform="translate(80, 180)">
+
+                            <rect class="card-box" width="260" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">Time-of-Flight</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Martyna Czogalik</text>
+                            <text x="16" y="66" class="node-small">Status: Test</text>
+
+                            <text x="244" y="95" text-anchor="end" class="percent-top">100%</text>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="244" y="113" text-anchor="end" class="percent-top">80%</text>
+                            <rect x="20" y="104" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="152" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="244" y="131" text-anchor="end" class="percent-top">20%</text>
+                            <rect x="20" y="122" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="38" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="diamand" data-title="Diamand detector" data-subwpl="Chiara Nociforo" data-status="Test" data-phase="Production" data-description="" data-development="50" data-tests="80" data-production="20" transform="translate(60, 360)">
+
+                            <rect class="card-box" width="260" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">Diamand detector</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Chiara Nociforo</text>
+                            <text x="16" y="66" class="node-small">Status: Test</text>
+
+                            <text x="244" y="95" text-anchor="end" class="percent-top">50%</text>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="95" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="244" y="113" text-anchor="end" class="percent-top">80%</text>
+                            <rect x="20" y="104" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="152" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="244" y="131" text-anchor="end" class="percent-top">20%</text>
+                            <rect x="20" y="122" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="38" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="music" data-title="MUSIC" data-subwpl="David Urner" data-status="Development" data-phase="Design" data-description="" data-development="30" data-tests="30" data-production="15" transform="translate(80, 540)">
+
+                            <rect class="card-box" width="280" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">MUSIC</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: David Urner</text>
+                            <text x="16" y="66" class="node-small">Status: Development</text>
+
+                            <text x="264" y="95" text-anchor="end" class="percent-top">30%</text>
+                            <rect x="20" y="86" width="210" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="63" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="264" y="113" text-anchor="end" class="percent-top">30%</text>
+                            <rect x="20" y="104" width="210" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="63" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="264" y="131" text-anchor="end" class="percent-top">15%</text>
+                            <rect x="20" y="122" width="210" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="31.5" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="gem-tpc" data-title="GEM TPC" data-subwpl="Francisco Garcia" data-status="Development" data-phase="Procurement" data-description="" data-development="70" data-tests="50" data-production="7" transform="translate(120, 720)">
+
+                            <rect class="card-box" width="260" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">GEM TPC</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Francisco Garcia</text>
+                            <text x="16" y="66" class="node-small">Status: Development</text>
+
+                            <text x="244" y="95" text-anchor="end" class="percent-top">70%</text>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="133" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="244" y="113" text-anchor="end" class="percent-top">50%</text>
+                            <rect x="20" y="104" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="95" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="244" y="131" text-anchor="end" class="percent-top">7%</text>
+                            <rect x="20" y="122" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="13.3" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="integration" data-title="System Integration" data-subwpl="Irakli Keshelashvili" data-status="Development" data-phase="Assembly" data-description="Integration of all detector and software systems" data-development="2" data-tests="3" data-production="4" transform="translate(450, 350)">
+
+                            <rect class="card-box" width="260" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">System Integration</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Irakli Keshelashvili</text>
+                            <text x="16" y="66" class="node-small">Status: Development</text>
+
+                            <text x="244" y="95" text-anchor="end" class="percent-top">2%</text>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="3.8" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="244" y="113" text-anchor="end" class="percent-top">3%</text>
+                            <rect x="20" y="104" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="5.7" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="244" y="131" text-anchor="end" class="percent-top">4%</text>
+                            <rect x="20" y="122" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="7.6" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="commissioning" data-title="Beam time commissioning" data-subwpl="Irakli Keshelashvili" data-status="Development" data-phase="Planing" data-description="" data-development="7" data-tests="8" data-production="9" transform="translate(450, 800)">
+
+                            <rect class="card-box" width="260" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">Beam time commissioning</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Irakli Keshelashvili</text>
+                            <text x="16" y="66" class="node-small">Status: Development</text>
+
+                            <text x="244" y="95" text-anchor="end" class="percent-top">7%</text>
+                            <rect x="20" y="86" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="13.3" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="244" y="113" text-anchor="end" class="percent-top">8%</text>
+                            <rect x="20" y="104" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="15.2" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="244" y="131" text-anchor="end" class="percent-top">9%</text>
+                            <rect x="20" y="122" width="190" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="17.1" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="daq" data-title="Data acquisition" data-subwpl="Stephane Pietri" data-status="Development" data-phase="Release" data-description="" data-development="10" data-tests="30" data-production="30" transform="translate(800, 100)">
+
+                            <rect class="card-box" width="300" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">Data acquisition</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Stephane Pietri</text>
+                            <text x="16" y="66" class="node-small">Status: Development</text>
+
+                            <text x="284" y="95" text-anchor="end" class="percent-top">10%</text>
+                            <rect x="20" y="86" width="230" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="23" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="284" y="113" text-anchor="end" class="percent-top">30%</text>
+                            <rect x="20" y="104" width="230" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="69" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="284" y="131" text-anchor="end" class="percent-top">30%</text>
+                            <rect x="20" y="122" width="230" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="69" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="dcs" data-title="Detector Control System" data-subwpl="Stephane Pietri" data-status="Development" data-phase="Release" data-description="" data-development="10" data-tests="10" data-production="10" transform="translate(850, 350)">
+
+                            <rect class="card-box" width="280" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">Detector Control System</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Stephane Pietri</text>
+                            <text x="16" y="66" class="node-small">Status: Development</text>
+
+                            <text x="264" y="95" text-anchor="end" class="percent-top">10%</text>
+                            <rect x="20" y="86" width="210" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="21" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="264" y="113" text-anchor="end" class="percent-top">10%</text>
+                            <rect x="20" y="104" width="210" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="21" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="264" y="131" text-anchor="end" class="percent-top">10%</text>
+                            <rect x="20" y="122" width="210" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="21" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                                                    <g class="node" data-id="ana" data-title="Analysis and data visualization" data-subwpl="Stephane Pietri" data-status="Development" data-phase="Release" data-description="" data-development="50" data-tests="50" data-production="50" transform="translate(800, 600)">
+
+                            <rect class="card-box" width="350" height="160" rx="18" ry="18"/>
+
+                            <text x="16" y="24" class="node-title">Analysis and data visualization</text>
+                            <text x="16" y="46" class="node-small">Sub WPL: Stephane Pietri</text>
+                            <text x="16" y="66" class="node-small">Status: Development</text>
+
+                            <text x="334" y="95" text-anchor="end" class="percent-top">50%</text>
+                            <rect x="20" y="86" width="280" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="86" width="140" height="10" rx="5" ry="5" fill="url(#gradDev)"/>
+
+                            <text x="334" y="113" text-anchor="end" class="percent-top">50%</text>
+                            <rect x="20" y="104" width="280" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="104" width="140" height="10" rx="5" ry="5" fill="url(#gradTest)"/>
+
+                            <text x="334" y="131" text-anchor="end" class="percent-top">50%</text>
+                            <rect x="20" y="122" width="280" height="10" rx="5" ry="5" class="progress-bg"/>
+                            <rect x="20" y="122" width="140" height="10" rx="5" ry="5" fill="url(#gradProd)"/>
+                        </g>
+                                    </svg>
