@@ -64,6 +64,7 @@
 <body>
     <nav>
         <?php
+        echo '<a href="../">HOME</a>';
         $baseDir = __DIR__;
         $dirs = glob($baseDir . '/menu_*', GLOB_ONLYDIR);
         foreach ($dirs as $dir) {
